@@ -1,0 +1,64 @@
+<!-- https://docs.google.com/a/opera.com/spreadsheets/d/1AOxz2FrUOcIj-_-QLeufDzkNk7kDtEWFKvguS7xJhvk/pubhtml -->
+
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title></title>
+    </head>
+    <body>
+		<script>
+			var database = {
+
+			};
+			
+			function jsonpCallback(data) {
+				var keys = [];
+
+				for (var i = 0; i < data.feed.entry.length; i+=1) {
+					for (var j in data.feed.entry[i]) {
+						if (j.indexOf('$') !== -1) {
+							j = (j.substring(j.indexOf('$') + 1, j.length));
+							if (keys.indexOf(j) === -1) {
+								keys.push(j);
+							}
+						}
+					}						
+				}				
+
+				for (var i = 0; i < data.feed.entry.length; i+=1) {
+					database[i+1] = {};
+
+					for (var j = 0; j < keys.length; j+=1) {
+						database[i+1][keys[j]] = data.feed.entry[i]['gsx$' + keys[j]]['$t'];
+					}
+				}
+
+				console.table(database);
+
+				// for (var i = 0; i < data.feed.entry.length; i+=1) {
+					// database[i] = {
+					// 	id: (typeof data.feed.entry[i]['gsx$id'] !== 'undefined' ? data.feed.entry[i]['gsx$id']['$t'] : null), 
+					// 	name: (typeof data.feed.entry[i]['gsx$name'] !== 'undefined' ? data.feed.entry[i]['gsx$name']['$t'] : null),
+					// 	role: (typeof data.feed.entry[i]['gsx$role'] !== 'undefined' ? data.feed.entry[i]['gsx$role']['$t'] : null)
+					// }
+				// }
+
+				// for (var i = 0; i < data.feed.entry.length; i+=1) {
+				// 	database[i] = {
+				// 		id: (typeof data.feed.entry[i]['gsx$id'] !== 'undefined' ? data.feed.entry[i]['gsx$id']['$t'] : null), 
+				// 		name: (typeof data.feed.entry[i]['gsx$name'] !== 'undefined' ? data.feed.entry[i]['gsx$name']['$t'] : null),
+				// 		role: (typeof data.feed.entry[i]['gsx$role'] !== 'undefined' ? data.feed.entry[i]['gsx$role']['$t'] : null)
+				// 	}
+				// }
+
+				// for (var i in database) {
+				// 	console.log(database[i]);
+				// }
+			}
+		</script>    
+    	<script src="https://spreadsheets.google.com/feeds/list/1AOxz2FrUOcIj-_-QLeufDzkNk7kDtEWFKvguS7xJhvk/od6/public/values?alt=json-in-script&callback=jsonpCallback"></script>
+    </body>
+</html>
